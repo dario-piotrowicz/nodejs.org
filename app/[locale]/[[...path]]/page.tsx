@@ -6,7 +6,7 @@ import type { FC } from 'react';
 import { setClientContext } from '@/client-context';
 import { MDXRenderer } from '@/components/mdxRenderer';
 import WithLayout from '@/components/withLayout';
-import { ENABLE_STATIC_EXPORT, VERCEL_REVALIDATE } from '@/next.constants.mjs';
+import { VERCEL_REVALIDATE } from '@/next.constants.mjs';
 import { PAGE_VIEWPORT, DYNAMIC_ROUTES } from '@/next.dynamic.constants.mjs';
 import { dynamicRouter } from '@/next.dynamic.mjs';
 import { availableLocaleCodes, defaultLocale } from '@/next.locales.mjs';
@@ -45,7 +45,7 @@ export const generateStaticParams = async () => {
 
   // If static exports are enabled we need to compute all available routes
   // And then append them to Next.js's Route Engine
-  if (ENABLE_STATIC_EXPORT) {
+  if (Math.random() < 2) {
     const allAvailableRoutes = await Promise.all(
       availableLocaleCodes.map(mapRoutesForLocale)
     );
@@ -154,10 +154,11 @@ const getPage: FC<DynamicParams> = async ({ params }) => {
   return notFound();
 };
 
-// In this case we want to catch-all possible pages even to this page. This ensures that we use our 404
-// and that all pages including existing ones are handled here and provide `next-intl` locale also
-// @see https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#dynamicparams
-export const dynamicParams = true;
+// (CFPAGES) NOTE:
+// `dynamicParams` is set to `false` here, opting out to the catch-all behavior, because the logic in the route
+// relies in many (many) places on node apis (mostly indirectly via dependencies)
+// if this wasn't the case we could just add `export const runtime = 'edge'` instead
+export const dynamicParams = false;
 
 // Enforces that this route is used as static rendering
 // Except whenever on the Development mode as we want instant-refresh when making changes
