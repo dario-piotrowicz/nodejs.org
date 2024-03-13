@@ -29,9 +29,11 @@ export const GET = async (_: Request, { params }: StaticParams) => {
 export const generateStaticParams = async () =>
   siteConfig.rssFeeds.map(feed => ({ feed: feed.file, locale }));
 
-// Forces that only the paths from `generateStaticParams` are allowed, giving 404 on the contrary
-// @see https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#dynamicparams
-export const dynamicParams = true;
+// (CFPAGES) NOTE:
+// `dynamicParams` is set to `false` here, opting out to the catch-all behavior, because the `provideWebsiteFeeds` logic
+// above relies on node apis: https://github.com/nodejs/nodejs.org/blob/218dbb1/next-data/generators/blogData.mjs#L3-L5
+// if this wasn't the case we could just add `export const runtime = 'edge'` instead
+export const dynamicParams = false;
 
 // Enforces that this route is cached and static as much as possible
 // @see https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#dynamic
