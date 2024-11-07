@@ -33,7 +33,11 @@
     "storybook:build": "cross-env NODE_NO_WARNINGS=1 storybook build --quiet --webpack-stats-json",
     "test:unit": "cross-env NODE_NO_WARNINGS=1 jest",
     "test:unit:watch": "npm run test:unit -- --watch",
-    "test": "turbo test:unit"
+    "test": "turbo test:unit",
+    "build:worker": "cloudflare",
+    "dev:worker": "wrangler dev --port 8771",
+    "preview:worker": "turbo build:worker && turbo dev:worker",
+    "deploy:worker": "npm run build:worker && wrangler deploy"
   },
   "dependencies": {
     "@heroicons/react": "~2.1.5",
@@ -91,6 +95,7 @@
   "devDependencies": {
     "@eslint/compat": "~1.2.0",
     "@next/eslint-plugin-next": "~14.2.14",
+    "@opennextjs/cloudflare": "^0.2.1",
     "@storybook/addon-controls": "~8.4.1",
     "@storybook/addon-interactions": "~8.4.1",
     "@storybook/addon-themes": "~8.4.1",
@@ -122,6 +127,7 @@
     "stylelint-selector-bem-pattern": "4.0.1",
     "typescript": "~5.6.3",
     "typescript-eslint": "~8.8.1",
-    "user-agent-data-types": "0.4.2"
+    "user-agent-data-types": "0.4.2",
+    "wrangler": "^3.85.0"
   }
 }

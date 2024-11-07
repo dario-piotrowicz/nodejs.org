@@ -35,3 +35,7 @@ tsconfig.tsbuildinfo
 .sentryclirc
 
 dist/
+
+# Ignore worker artifacts
+apps/site/.worker-next
+apps/site/.wrangler

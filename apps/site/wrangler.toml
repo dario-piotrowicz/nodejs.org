@@ -1,0 +1,5 @@
+main = ".worker-next/index.mjs"
+name = "nodejs-website"
+compatibility_date = "2024-11-07"
+compatibility_flags = ["nodejs_compat"]
+assets = { directory = ".worker-next/assets", binding = "ASSETS" }
