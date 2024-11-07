@@ -1,15 +1,17 @@
 import { cache } from 'react';
 
-import generateBlogData from '@/next-data/generators/blogData.mjs';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import generateBlogData from '@/.blogData.mjs';
 import { BLOG_POSTS_PER_PAGE } from '@/next.constants.mjs';
-import type { BlogPostsRSC } from '@/types';
+import type { BlogPost, BlogPostsRSC } from '@/types';
 
 const { categories, posts } = await generateBlogData();
 
 export const provideBlogCategories = cache(() => categories);
 
 export const provideBlogPosts = cache((category: string): BlogPostsRSC => {
-  const categoryPosts = posts
+  const categoryPosts = (posts as Array<BlogPost>)
     .filter(post => post.categories.includes(category))
     .sort((a, b) => b.date.getTime() - a.date.getTime());
 
