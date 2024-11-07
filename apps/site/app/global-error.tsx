@@ -1,16 +1,13 @@
 'use client';
 
 import { ArrowRightIcon } from '@heroicons/react/24/solid';
-import { captureException } from '@sentry/nextjs';
 import type { FC } from 'react';
 
 import Button from '@/components/Common/Button';
 import BaseLayout from '@/layouts/Base';
 import GlowingBackdropLayout from '@/layouts/GlowingBackdrop';
 
-const GlobalErrorPage: FC<{ error: Error }> = ({ error }) => {
-  captureException(error);
-
+const GlobalErrorPage: FC<{ error: Error }> = () => {
   return (
     <html>
       <body>

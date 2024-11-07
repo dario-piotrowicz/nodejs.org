@@ -1,16 +1,9 @@
 'use strict';
 
-import { withSentryConfig } from '@sentry/nextjs';
 import withNextIntl from 'next-intl/plugin';
 
 import { BASE_PATH, ENABLE_STATIC_EXPORT } from './next.constants.mjs';
 import { redirects, rewrites } from './next.rewrites.mjs';
-import {
-  SENTRY_DSN,
-  SENTRY_ENABLE,
-  SENTRY_EXTENSIONS,
-  SENTRY_TUNNEL,
-} from './sentry.constants.mjs';
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -73,7 +66,7 @@ const nextConfig = {
   // we also configure ESLint to run its lint checking on all files (next lint)
   eslint: { dirs: ['.'], ignoreDuringBuilds: true },
   // Adds custom WebPack configuration to our Next.hs setup
-  webpack: function (config, { webpack }) {
+  webpack: function (config) {
     // Next.js WebPack Bundler does not know how to handle `.mjs` files on `node_modules`
     // This is not an issue when using TurboPack as it uses SWC and it is ESM-only
     // Once Next.js uses Turbopack for their build process we can remove this
@@ -82,18 +75,6 @@ const nextConfig = {
       type: 'javascript/auto',
       resolve: { fullySpecified: false },
     });
-
-    // Tree-shakes modules from Sentry Bundle
-    config.plugins.push(new webpack.DefinePlugin(SENTRY_EXTENSIONS));
-
-    // Ignore Sentry's Critical Dependency from Open Telemetry
-    // (which is genuinely a cause of concern, but there is no work around at the moment)
-    config.ignoreWarnings = [
-      {
-        module: /@opentelemetry\/instrumentation/,
-        message: /Critical dependency/,
-      },
-    ];
 
     return config;
   },
@@ -113,50 +94,12 @@ const nextConfig = {
     ],
     // Removes the warning regarding the WebPack Build Worker
     webpackBuildWorker: true,
-    // Enables Next.js's Instrumentation Hook
-    instrumentationHook: true,
   },
   // To import ESM-only packages with next dev --turbo. Source: https://github.com/vercel/next.js/issues/63318#issuecomment-2079677098
   transpilePackages: ['shiki'],
 };
 
-/** @type {import('@sentry/cli').SentryCliOptions} */
-const sentrySettings = {
-  // We don't want Sentry to emit logs
-  silent: true,
-  // Define the Sentry Organisation
-  org: 'nodejs-org',
-  // Define the Sentry Project on our Sentry Organisation
-  project: 'nodejs-org',
-  // Sentry DSN for the Node.js Website
-  dsn: SENTRY_DSN,
-};
-
-/** @type {import('@sentry/nextjs/types/config/types').UserSentryOptions} */
-const sentryConfig = {
-  // Upload Next.js or third-party code in addition to our code
-  widenClientFileUpload: true,
-  // Attempt to circumvent ad blockers
-  tunnelRoute: SENTRY_TUNNEL(),
-  // Prevent source map comments in built files
-  hideSourceMaps: false,
-  // Tree shake Sentry stuff from the bundle
-  disableLogger: true,
-  // Applies same WebPack Transpilation as Next.js
-  transpileClientSDK: true,
-};
-
 // Next.js Configuration with `next.intl` enabled
 const nextWithIntl = withNextIntl('./i18n.tsx')(nextConfig);
 
-// Next.js Configuration with `sentry` enabled
-const nextWithSentry = withSentryConfig(
-  // Next.js Config with i18n Configuration
-  nextWithIntl,
-  // Sentrz SDK and WebPack Settings
-  { ...sentrySettings, ...sentryConfig }
-);
-
-// Decides whether enabling Sentry or not
-// By default we only want to enable Sentry within a Vercel Environment
-export default SENTRY_ENABLE ? nextWithSentry : nextWithIntl;
+export default nextWithIntl;

@@ -1,4 +1,3 @@
-import { setContext, setTags } from '@sentry/nextjs';
 import { notFound, redirect } from 'next/navigation';
 import { unstable_setRequestLocale } from 'next-intl/server';
 import type { FC } from 'react';
@@ -93,9 +92,6 @@ const getPage: FC<DynamicParams> = async ({ params }) => {
   // it means it does not have a Markdown file nor exists under the filesystem
   // but it is a valid route with an assigned layout that should be rendered
   if (staticGeneratedLayout !== undefined) {
-    // Decorate the Locale and current Pathname to Sentry
-    setTags({ pathname, locale });
-
     // Metadata and shared Context to be available through the lifecycle of the page
     const sharedContext = { pathname: `/${pathname}` };
 
@@ -121,9 +117,6 @@ const getPage: FC<DynamicParams> = async ({ params }) => {
     pathname
   );
 
-  // Decorate the Locale and current Pathname to Sentry
-  setTags({ pathname, locale, filename });
-
   if (source.length && filename.length) {
     // This parses the source Markdown content and returns a React Component and
     // relevant context from the Markdown File
@@ -138,13 +131,6 @@ const getPage: FC<DynamicParams> = async ({ params }) => {
       readingTime,
       filename,
     };
-
-    // Add Additional relevant reproduction Context from MDX
-    setContext('MDX Provider', {
-      frontmatter,
-      headings,
-      readingTime,
-    });
 
     // Defines a shared Server Context for the Client-Side
     // That is shared for all pages under the dynamic router
