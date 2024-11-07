@@ -1,8 +1,10 @@
+/* eslint import-x/order: "off" */
 import { cache } from 'react';
 
-import generateBlogData from '@/next-data/generators/blogData.mjs';
+import generateBlogData from '@generated/blogData.mjs';
+
 import { BLOG_POSTS_PER_PAGE } from '@/next.constants.mjs';
-import type { BlogCategory, BlogPostsRSC } from '@/types';
+import type { BlogCategory, BlogPost, BlogPostsRSC } from '@/types';
 
 const { categories, posts } = await generateBlogData();
 
@@ -10,7 +12,7 @@ export const provideBlogCategories = cache(() => categories);
 
 export const provideBlogPosts = cache(
   (category: BlogCategory): BlogPostsRSC => {
-    const categoryPosts = posts
+    const categoryPosts = (posts as Array<BlogPost>)
       .filter(post => post.categories.includes(category))
       .sort((a, b) => b.date.getTime() - a.date.getTime());
 

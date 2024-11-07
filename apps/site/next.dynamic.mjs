@@ -1,5 +1,6 @@
 'use strict';
 
+import { exists } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import { join, normalize, sep } from 'node:path';
 
@@ -7,6 +8,7 @@ import matter from 'gray-matter';
 import { cache } from 'react';
 import { VFile } from 'vfile';
 
+import { getMarkdownFiles } from './.next.helpers.mjs';
 import {
   BASE_PATH,
   BASE_URL,
@@ -19,7 +21,6 @@ import {
   IGNORED_ROUTES,
   PAGE_METADATA,
 } from './next.dynamic.constants.mjs';
-import { getMarkdownFiles } from './next.helpers.mjs';
 import { siteConfig } from './next.json.mjs';
 import { availableLocaleCodes, defaultLocale } from './next.locales.mjs';
 import { compile } from './next.mdx.compiler.mjs';
@@ -62,7 +63,7 @@ const getDynamicRouter = async () => {
 
   const websitePages = await getMarkdownFiles(
     process.cwd(),
-    `pages/${defaultLocale.code}`
+    `/pages/${defaultLocale.code}`
   );
 
   websitePages.forEach(filename => {
@@ -110,9 +111,18 @@ const getDynamicRouter = async () => {
 
     // This verifies if the given pathname actually exists on our Map
     // meaning that the route exists on the website and can be rendered
-    if (pathnameToFilename.has(normalizedPathname)) {
-      const filename = pathnameToFilename.get(normalizedPathname);
-      const filepath = join(process.cwd(), 'pages', locale, filename);
+    if (
+      pathnameToFilename.has(normalizedPathname) ||
+      pathnameToFilename.has(`pages/${locale}/${normalizedPathname}`)
+    ) {
+      // const filename = pathnameToFilename.get(normalizedPathname);
+      const filename = (
+        pathnameToFilename.get(normalizedPathname) ??
+        pathnameToFilename.get(`pages/${locale}/${normalizedPathname}`)
+      ).replace(new RegExp(`^pages/${locale}/`), '');
+
+      // let filepath = join(process.cwd(), 'pages');
+      let filepath = join(process.cwd(), 'pages', locale, filename);
 
       // We verify if our Markdown cache already has a cache entry for a localized
       // version of this file, because if not, it means that either
@@ -131,6 +141,10 @@ const getDynamicRouter = async () => {
         () => undefined
       );
 
+      const existsPromise = path => {
+        return new Promise(resolve => exists(path, resolve));
+      };
+
       // No cache hit exists, so we check if the localized file actually
       // exists within our file system and if it does we set it on the cache
       // and return the current fetched result;
@@ -139,6 +153,14 @@ const getDynamicRouter = async () => {
           `${locale}${normalizedPathname}`,
           fileLanguageContent
         );
+
+        return { source: fileLanguageContent, filename };
+      }
+
+      // and return the current fetched result; If the file does not exist
+      // we fallback to the English source
+      if (await existsPromise(join(filepath, locale, filename))) {
+        filepath = join(filepath, locale, filename);
 
         return { source: fileLanguageContent, filename };
       }

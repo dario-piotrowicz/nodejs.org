@@ -2,8 +2,6 @@
 
 import { fileURLToPath } from 'node:url';
 
-import { glob } from 'glob';
-
 /**
  * We create a locale cache of Glob Promises
  * to avoid reading the file system multiple times
@@ -15,19 +13,6 @@ const globCacheByPath = new Map();
 
 export const getMatchingRoutes = (route = '', matches = []) =>
   matches.some(match => route === match);
-
-/**
- * This method is responsible for reading all immediate subdirectories of a directory
- *
- * @param {string} root the root directory to search from
- * @param {string} cwd the current working directory
- * @returns {Promise<Array<string>>} a promise containing an array of directories
- */
-export const getDirectories = async (root, cwd) => {
-  return glob('*', { root, cwd, withFileTypes: true })
-    .then(d => d.filter(e => e.isDirectory()))
-    .then(d => d.map(e => e.name));
-};
 
 /**
  * This gets the relative path from `import.meta.url`
@@ -53,8 +38,18 @@ export const getMarkdownFiles = async (root, cwd, ignore = []) => {
   const cacheKey = `${root}${cwd}${ignore.join('')}`;
 
   if (!globCacheByPath.has(cacheKey)) {
-    globCacheByPath.set(cacheKey, glob('**/*.{md,mdx}', { root, cwd, ignore }));
+    const keyFiles = files
+      .filter(
+        file => file.startsWith(cwd) || file.startsWith(cwd.replace(/^\//, ''))
+      )
+      .map(file => file.replace(`${cwd}/`, '/'));
+
+    globCacheByPath.set(cacheKey, Promise.resolve(keyFiles));
   }
 
   return globCacheByPath.get(cacheKey);
 };
+
+export const files = [
+  /* generated at build time */
+];

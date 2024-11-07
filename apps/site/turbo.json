@@ -138,6 +138,15 @@
         "*.{md,mdx,json,ts,tsx,mjs,yml}"
       ],
       "outputs": ["coverage/**", "junit.xml"]
+    },
+    "build:cloudflare": {
+      "outputs": [".open-next/**"]
+    },
+    "preview:cloudflare": {
+      "dependsOn": ["build:cloudflare"]
+    },
+    "deploy:cloudflare": {
+      "dependsOn": ["build:cloudflare"]
     }
   }
 }
