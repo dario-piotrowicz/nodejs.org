@@ -34,9 +34,9 @@
     "test:unit": "cross-env NODE_NO_WARNINGS=1 jest",
     "test:unit:watch": "npm run test:unit -- --watch",
     "test": "turbo test:unit",
-    "build:worker": "cloudflare",
+    "build:worker": "cross-env cloudflare",
     "dev:worker": "wrangler dev --port 8771",
-    "preview:worker": "turbo build:worker && turbo dev:worker",
+    "preview:worker": "npm run build:worker && npm run dev:worker",
     "deploy:worker": "npm run build:worker && wrangler deploy"
   },
   "dependencies": {
