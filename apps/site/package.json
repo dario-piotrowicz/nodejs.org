@@ -34,10 +34,9 @@
     "test:unit": "cross-env NODE_NO_WARNINGS=1 jest",
     "test:unit:watch": "npm run test:unit -- --watch",
     "test": "turbo test:unit",
-    "build:worker": "cross-env cloudflare",
-    "dev:worker": "wrangler dev --port 8771",
-    "preview:worker": "npm run build:worker && npm run dev:worker",
-    "deploy:worker": "npm run build:worker && wrangler deploy"
+    "build:cloudflare": "cross-env cloudflare && ln -s ../../pages ./.worker-next/assets/",
+    "preview:cloudflare": "wrangler dev --port 8771",
+    "deploy:cloudflare": "wrangler deploy"
   },
   "dependencies": {
     "@heroicons/react": "~2.1.5",

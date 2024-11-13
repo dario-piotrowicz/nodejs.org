@@ -1,13 +1,15 @@
 'use strict';
 
-import { existsSync } from 'node:fs';
-import { readFile } from 'node:fs/promises';
+import { exists as nodeExists } from 'node:fs';
+import { readFile as nodeReadFile } from 'node:fs/promises';
 import { join, normalize, sep } from 'node:path';
 
 import matter from 'gray-matter';
 import { cache } from 'react';
 import { VFile } from 'vfile';
 
+import { readFile as runtimeReadFile } from './.cloudflare/node/fs/promises.mjs';
+import { exists as runtimeExists } from './.cloudflare/node/fs.mjs';
 import { BASE_URL, BASE_PATH, IS_DEVELOPMENT } from './next.constants.mjs';
 import {
   IGNORED_ROUTES,
@@ -18,6 +20,15 @@ import { getMarkdownFiles } from './next.helpers.mjs';
 import { siteConfig } from './next.json.mjs';
 import { availableLocaleCodes, defaultLocale } from './next.locales.mjs';
 import { compileMDX } from './next.mdx.compiler.mjs';
+
+const readFile =
+  globalThis.navigator?.userAgent === 'Cloudflare-Workers'
+    ? runtimeReadFile
+    : nodeReadFile;
+const exists =
+  globalThis.navigator?.userAgent === 'Cloudflare-Workers'
+    ? runtimeExists
+    : nodeExists;
 
 // This is the combination of the Application Base URL and Base PATH
 const baseUrlAndPath = `${BASE_URL}${BASE_PATH}`;
@@ -56,7 +67,7 @@ const getDynamicRouter = async () => {
 
   const websitePages = await getMarkdownFiles(
     process.cwd(),
-    `pages/${defaultLocale.code}`
+    `/pages/${defaultLocale.code}`
   );
 
   websitePages.forEach(filename => {
@@ -120,11 +131,14 @@ const getDynamicRouter = async () => {
         return { source: fileContent, filename };
       }
 
+      const existsPromise = path =>
+        new Promise(resolve => exists(path, resolve));
+
       // No cache hit exists, so we check if the localized file actually
       // exists within our file system and if it does we set it on the cache
       // and return the current fetched result; If the file does not exist
       // we fallback to the English source
-      if (existsSync(join(filePath, locale, filename))) {
+      if (await existsPromise(join(filePath, locale, filename))) {
         filePath = join(filePath, locale, filename);
 
         const fileContent = await readFile(filePath, 'utf8');

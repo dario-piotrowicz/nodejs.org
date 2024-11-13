@@ -76,6 +76,11 @@ const nextConfig = {
       resolve: { fullySpecified: false },
     });
 
+    // CF hacking: temporarily disable minification to make debugging easier
+    config.optimization = {
+      minimize: false,
+    };
+
     return config;
   },
   experimental: {
