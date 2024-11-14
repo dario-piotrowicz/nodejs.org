@@ -75,7 +75,7 @@ The following is an incomplete list of tasks and problems that still need to be 
 - [x] reimplement `getMarkdownFiles` in `next.helpers.mjs` to be generated at build time
   - this can be accomplished either via a npm/turbo prebuild task, or possibly as part of next.js SSG/staticProps but
   - [ ] we need to ensure that we don't end up accidentally downloading this big file to the client as part of hydration
-  - [ ] once we have easy access to the list of files, we should roll back changes to `next-data/providers/blogData.ts`
+  - [x] once we have easy access to the list of files, we should roll back changes to `next-data/providers/blogData.ts`
 - [ ] back out most changes from `next.dynamic.mjs`
   - [ ] instead of using runtime detection via `globalThis.navigator?.userAgent`, we should instead use `alias` feature in `wrangler.toml` to override the implementation of `node:fs` calls but only when running in workerd as we need the build to keep on running in node.js for SSG to work
   - [ ] could we reimplement the `existsAsync` call as sync `exists` which consults `getMarkdownFiles` from the task above? alternatively
