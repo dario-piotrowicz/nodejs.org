@@ -1,4 +1,4 @@
-import { files } from '../../next.helpers.mjs';
+import { files } from '../../.next.helpers.mjs';
 
 export function readdir(params, cb) {
   console.log('fs#readdir', params);
