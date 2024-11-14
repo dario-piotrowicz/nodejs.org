@@ -132,7 +132,7 @@
       "outputs": ["coverage/**", "junit.xml"]
     },
     "build:cloudflare": {
-      "outputs": [".worker-next/**"]
+      "outputs": [".open-next/**"]
     },
     "preview:cloudflare": {
       "dependsOn": ["build:cloudflare"]

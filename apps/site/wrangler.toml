@@ -1,4 +1,4 @@
-main = ".worker-next/index.mjs"
+main = ".open-next/index.mjs"
 name = "nodejs-website"
 compatibility_date = "2024-11-07"
 compatibility_flags = ["nodejs_compat"]
@@ -16,5 +16,5 @@ head_sampling_rate = 1
 
 
 [assets]
-directory = ".worker-next/assets"
+directory = ".open-next/assets"
 binding = "ASSETS"

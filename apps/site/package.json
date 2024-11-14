@@ -34,7 +34,7 @@
     "test:unit": "cross-env NODE_NO_WARNINGS=1 jest",
     "test:unit:watch": "npm run test:unit -- --watch",
     "test": "turbo test:unit",
-    "build:cloudflare": "cross-env cloudflare && ln -s ../../pages ./.worker-next/assets/",
+    "build:cloudflare": "cross-env cloudflare && ln -s ../../pages ./.open-next/assets/",
     "preview:cloudflare": "wrangler dev --port 8771",
     "deploy:cloudflare": "wrangler deploy"
   },
@@ -93,7 +93,7 @@
   "devDependencies": {
     "@eslint/compat": "~1.2.0",
     "@next/eslint-plugin-next": "~14.2.14",
-    "@opennextjs/cloudflare": "^0.2.1",
+    "@opennextjs/cloudflare": "https://pkg.pr.new/@opennextjs/cloudflare@experimental",
     "@storybook/addon-controls": "~8.4.1",
     "@storybook/addon-interactions": "~8.4.1",
     "@storybook/addon-themes": "~8.4.1",

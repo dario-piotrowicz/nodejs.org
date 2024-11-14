@@ -16,7 +16,7 @@ export default [
       'junit.xml',
       'storybook-static/**',
       '**/.wrangler',
-      '**/.worker-next',
+      '**/.open-next',
     ],
   },
   {
