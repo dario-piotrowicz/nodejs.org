@@ -38,3 +38,4 @@ apps/site/.open-next
 apps/site/.wrangler
 
 .next.helpers.mjs
+.blogData.mjs

@@ -63,6 +63,15 @@ const generateBlogData = async () => {
     '**/index.md',
   ]);
 
+  const result = { /* generated at build time */ };
+
+  if (Object.keys(result).length > 0) {
+    return {
+      ...result,
+      posts: result.posts.map(post => ({ ...post, date: new Date(post.date) })),
+    };
+  }
+
   return new Promise(resolve => {
     const posts = [];
     const rawFrontmatter = [];
