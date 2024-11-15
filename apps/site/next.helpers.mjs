@@ -40,13 +40,15 @@ export const getMarkdownFiles = async (root, cwd, ignore = []) => {
   const cacheKey = `${root}${cwd}${ignore.join('')}`;
 
   if (!globCacheByPath.has(cacheKey)) {
+    const keyFiles = files
+      .filter(file => file.startsWith(cwd) || file.startsWith(cwd.replace(/^\//, '')))
+      .map(file => file.replace(`${cwd}/`, '/'));
+
     //globCacheByPath.set(cacheKey, glob('**/*.{md,mdx}', { root, cwd, ignore }));
     globCacheByPath.set(
       cacheKey,
       Promise.resolve(
-        files
-          .filter(file => file.startsWith(cwd))
-          .map(file => file.replace(`${cwd}/`, '/'))
+        keyFiles
       )
     );
   }

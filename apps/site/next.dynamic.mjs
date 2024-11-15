@@ -104,8 +104,10 @@ const getDynamicRouter = async () => {
 
     // This verifies if the given pathname actually exists on our Map
     // meaning that the route exists on the website and can be rendered
-    if (pathnameToFilename.has(normalizedPathname)) {
-      const filename = pathnameToFilename.get(normalizedPathname);
+    if (pathnameToFilename.has(normalizedPathname) || pathnameToFilename.has(`pages/${locale}/` + normalizedPathname)) {
+      const filename = (pathnameToFilename.get(normalizedPathname) ?? pathnameToFilename.get(`pages/${locale}/` + normalizedPathname)).replace(
+        new RegExp(`^pages/${locale}/`), ''
+      );
 
       let filePath = join(process.cwd(), 'pages');
 
@@ -120,8 +122,9 @@ const getDynamicRouter = async () => {
         return { source: fileContent, filename };
       }
 
-      const existsPromise = path =>
-        new Promise(resolve => exists(path, resolve));
+      const existsPromise = path => {
+        return new Promise(resolve => exists(path, resolve));
+      }
 
       // No cache hit exists, so we check if the localized file actually
       // exists within our file system and if it does we set it on the cache

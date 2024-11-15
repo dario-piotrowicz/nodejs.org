@@ -19,6 +19,7 @@
     "scripts:release-post": "cross-env NODE_NO_WARNINGS=1 node scripts/release-post/index.mjs",
     "dev": "cross-env NODE_NO_WARNINGS=1 next dev --turbo",
     "serve": "npm run dev",
+    "predev": "node scripts/prebuild.generator.mjs",
     "prebuild": "node scripts/prebuild.generator.mjs",
     "build": "cross-env NODE_NO_WARNINGS=1 next build",
     "start": "cross-env NODE_NO_WARNINGS=1 next start",

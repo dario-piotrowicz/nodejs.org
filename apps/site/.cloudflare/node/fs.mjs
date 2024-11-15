@@ -6,8 +6,9 @@ export function readdir(params, cb) {
 }
 
 export function exists(path, cb) {
-  console.log('fs#exists', path, files.includes(path));
-  cb(files.includes(path));
+  const result = files.includes(path) || files.includes(path.replace(/^\//, ''));
+  console.log('fs#exists', path, result);
+  cb(result);
 }
 
 // export function createReadStream(path) {
