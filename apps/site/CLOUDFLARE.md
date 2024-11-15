@@ -71,7 +71,9 @@ You can monitor and configure the project at https://dash.cloudflare.com/fb4a2d0
 
 The following is an incomplete list of tasks and problems that still need to be resolved:
 
-- [ ] sort out issues with `eval` and MDX and undo edits in `./app/[locale]/[[...path]]/page.tsx`
+- [x] update `@opennextjs/cloudflare` to the latest in `/apps/site/package.json`
+- [ ] sort out issues with `eval` and MDX (Claudio is looking into this one)
+- [ ] and undo edits in `./app/[locale]/[[...path]]/page.tsx`
 - [x] reimplement `getMarkdownFiles` in `next.helpers.mjs` to be generated at build time
   - this can be accomplished either via a npm/turbo prebuild task, or possibly as part of next.js SSG/staticProps but
   - [ ] we need to ensure that we don't end up accidentally downloading this big file to the client as part of hydration
