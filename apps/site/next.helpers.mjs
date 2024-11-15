@@ -2,8 +2,6 @@
 
 import { fileURLToPath } from 'node:url';
 
-//import { glob } from 'glob';
-
 /**
  * We create a locale cache of Glob Promises
  * to avoid reading the file system multiple times
@@ -44,7 +42,6 @@ export const getMarkdownFiles = async (root, cwd, ignore = []) => {
       .filter(file => file.startsWith(cwd) || file.startsWith(cwd.replace(/^\//, '')))
       .map(file => file.replace(`${cwd}/`, '/'));
 
-    //globCacheByPath.set(cacheKey, glob('**/*.{md,mdx}', { root, cwd, ignore }));
     globCacheByPath.set(
       cacheKey,
       Promise.resolve(
