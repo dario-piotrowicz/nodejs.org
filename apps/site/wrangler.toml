@@ -9,11 +9,9 @@ enabled = true
 head_sampling_rate = 1
 
 [alias]
-# "node:fs" = "./.cloudflare/node/fs.mjs"
-# "node:fs/promises" = "./.cloudflare/node/fs/promises.mjs"
-# "node:fs" = "./.cloudflare/node/fs.mjs"
-# "node:fs/promises" = "./.cloudflare/node/fs/promises.mjs"
-
+"node:fs" = "./.cloudflare/node/fs.mjs"
+"node:fs/promises" = "./.cloudflare/node/fs/promises.mjs"
+"server-only" = "./.cloudflare/server-only.mjs"
 
 [assets]
 directory = ".open-next/assets"

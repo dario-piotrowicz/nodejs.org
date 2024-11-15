@@ -1,15 +1,13 @@
 'use strict';
 
-import { exists as nodeExists } from 'node:fs';
-import { readFile as nodeReadFile } from 'node:fs/promises';
+import { exists } from 'node:fs';
+import { readFile } from 'node:fs/promises';
 import { join, normalize, sep } from 'node:path';
 
 import matter from 'gray-matter';
 import { cache } from 'react';
 import { VFile } from 'vfile';
 
-import { readFile as runtimeReadFile } from './.cloudflare/node/fs/promises.mjs';
-import { exists as runtimeExists } from './.cloudflare/node/fs.mjs';
 import { getMarkdownFiles } from './.next.helpers.mjs';
 import { BASE_URL, BASE_PATH, IS_DEVELOPMENT } from './next.constants.mjs';
 import {
@@ -20,15 +18,6 @@ import {
 import { siteConfig } from './next.json.mjs';
 import { availableLocaleCodes, defaultLocale } from './next.locales.mjs';
 import { compileMDX } from './next.mdx.compiler.mjs';
-
-const readFile =
-  globalThis.navigator?.userAgent === 'Cloudflare-Workers'
-    ? runtimeReadFile
-    : nodeReadFile;
-const exists =
-  globalThis.navigator?.userAgent === 'Cloudflare-Workers'
-    ? runtimeExists
-    : nodeExists;
 
 // This is the combination of the Application Base URL and Base PATH
 const baseUrlAndPath = `${BASE_URL}${BASE_PATH}`;
@@ -50,7 +39,7 @@ const createCachedMarkdownCache = () => {
   if (IS_DEVELOPMENT) {
     return {
       has: () => false,
-      set: () => {},
+      set: () => { },
       get: () => null,
     };
   }
