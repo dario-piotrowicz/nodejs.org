@@ -80,8 +80,7 @@ The following is an incomplete list of tasks and problems that still need to be 
   - [x] once we have easy access to the list of files, we should roll back changes to `next-data/providers/blogData.ts`
 - [ ] back out most changes from `next.dynamic.mjs`
   - [x] instead of using runtime detection via `globalThis.navigator?.userAgent`, we should instead use `alias` feature in `wrangler.toml` to override the implementation of `node:fs` calls but only when running in workerd as we need the build to keep on running in node.js for SSG to work
-  - [ ] could we reimplement the `existsAsync` call as sync `exists` which consults `getMarkdownFiles` from the task above? alternatively
-  - [ ] properly implement the rest of `.cloudflare/node/*` polyfills
+  - [x] could we reimplement the `existsAsync` call as sync `exists` which consults `getMarkdownFiles` from the task above?
 - [ ] remove symlink hack in `package.json#build:cloudflare`
   - would it be possible to make the pages directory part of assets in a less hacky way?
   - [ ] move these files under `.open-next/assets/cdn-cgi/pages` so that these raw md files are not publicly accessible as that could become a maintenance burden down the road.
