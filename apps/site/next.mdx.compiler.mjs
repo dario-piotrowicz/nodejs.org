@@ -1,5 +1,6 @@
 'use strict';
 
+import React from 'react';
 import { evaluate } from '@mdx-js/mdx';
 import { Fragment, jsx, jsxs } from 'react/jsx-runtime';
 import { matter } from 'vfile-matter';
@@ -31,12 +32,22 @@ export async function compileMDX(source, fileExtension) {
   const slugger = createGitHubSlugger();
 
   // This is a minimal MDX Compiler that is lightweight and only parses the MDX
-  const { default: MDXContent } = await evaluate(source, {
-    rehypePlugins: NEXT_REHYPE_PLUGINS,
-    remarkPlugins: NEXT_REMARK_PLUGINS,
-    format: fileExtension,
-    ...reactRuntime,
-  });
+  const { default: MDXContent } = {
+    default: () => {
+      return React.createElement('span', {}, source.value);
+    },
+  };
+
+  // TODO: disable this because it's calling `eval` under the hood
+  // await evaluate(source, {
+  //   rehypePlugins: NEXT_REHYPE_PLUGINS,
+  //   remarkPlugins: NEXT_REMARK_PLUGINS,
+  //   format: fileExtension,
+  //   ...reactRuntime,
+  // });
+
+  // the evaluate above is side-effecty, and modifies `source`, so we need to change it as well.
+  source.data.headings = [];
 
   // Retrieve some parsed data from the VFile metadata
   // such as frontmatter and Markdown headings
