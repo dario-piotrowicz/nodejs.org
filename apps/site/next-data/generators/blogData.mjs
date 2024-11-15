@@ -68,6 +68,16 @@ const generateBlogData = async () => {
     const rawFrontmatter = [];
 
     filenames.forEach(filename => {
+      if (globalThis.navigator?.userAgent === 'Cloudflare-Workers') {
+        // createReadStream doesn't work in the workers runtime so let's skip this for now
+        // (note: the logic here does work at build time though)
+
+        console.log(`\x1b[31mRUNNING generateBlogData inside workerd, we should avoid this if possible!\x1b[0m`);
+
+        resolve({ categories: [], posts: [] });
+        return;
+      }
+
       // We create a stream for reading a file instead of reading the files
       const _stream = createReadStream(join(blogPath, filename));
 
