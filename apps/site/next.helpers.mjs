@@ -2,6 +2,8 @@
 
 import { fileURLToPath } from 'node:url';
 
+import { minimatch } from 'minimatch';
+
 /**
  * We create a locale cache of Glob Promises
  * to avoid reading the file system multiple times
@@ -42,6 +44,15 @@ export const getMarkdownFiles = async (root, cwd, ignore = []) => {
       .filter(
         file => file.startsWith(cwd) || file.startsWith(cwd.replace(/^\//, ''))
       )
+      .filter(file => {
+        for (const ignorePattern of ignore) {
+          const isMatch = minimatch(file, ignorePattern);
+          if (isMatch) {
+            return false;
+          }
+        }
+        return true;
+      })
       .map(file => file.replace(`${cwd}/`, '/'));
 
     globCacheByPath.set(cacheKey, Promise.resolve(keyFiles));
