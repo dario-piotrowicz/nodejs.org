@@ -1,14 +1,15 @@
+/* eslint import-x/order: "off" */
 'use strict';
 
 import { exists } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import { join, normalize, sep } from 'node:path';
 
+import { getMarkdownFiles } from '@generated/next.helpers.mjs';
 import matter from 'gray-matter';
 import { cache } from 'react';
 import { VFile } from 'vfile';
 
-import { getMarkdownFiles } from './.next.helpers.mjs';
 import {
   BASE_PATH,
   BASE_URL,

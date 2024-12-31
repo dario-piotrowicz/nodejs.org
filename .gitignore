@@ -37,6 +37,5 @@ dist/
 apps/site/.open-next
 apps/site/.wrangler
 
-.next.helpers.mjs
-.blogData.mjs
-.generated
+# Pre-build generated files
+apps/site/.generated
