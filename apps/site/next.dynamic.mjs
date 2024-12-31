@@ -114,12 +114,16 @@ const getDynamicRouter = async () => {
     // meaning that the route exists on the website and can be rendered
     if (
       pathnameToFilename.has(normalizedPathname) ||
-      pathnameToFilename.has(`pages/${locale}/${normalizedPathname}`)
+      pathnameToFilename.has(
+        `pages/${locale}${normalizedPathname ? `/${normalizedPathname}` : ''}`
+      )
     ) {
       // const filename = pathnameToFilename.get(normalizedPathname);
       const filename = (
         pathnameToFilename.get(normalizedPathname) ??
-        pathnameToFilename.get(`pages/${locale}/${normalizedPathname}`)
+        pathnameToFilename.get(
+          `pages/${locale}${normalizedPathname ? `/${normalizedPathname}` : ''}`
+        )
       ).replace(new RegExp(`^pages/${locale}/`), '');
 
       // let filepath = join(process.cwd(), 'pages');
