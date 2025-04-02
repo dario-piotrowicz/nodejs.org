@@ -44,6 +44,10 @@ const Breadcrumbs: FC<BreadcrumbsProps> = ({
           // We add 1 here to take into account of the truncated breadcrumb.
           position <= Math.abs(lengthOffset) + 1 && isOverflow && !isLastItem;
 
+        // in breadcrumbs links with empty strings as hrefs represent non clickable paths,
+        // so let's convert them to `undefined` so that the browser displays them as normal text
+        const href = link.href || undefined;
+
         return (
           <BreadcrumbItem
             key={link.label.toString()}
@@ -51,7 +55,7 @@ const Breadcrumbs: FC<BreadcrumbsProps> = ({
             hideSeparator={isLastItem}
             position={position + +!hideHome}
           >
-            <BreadcrumbLink as={as} href={link.href} active={isLastItem}>
+            <BreadcrumbLink as={as} href={href} active={isLastItem}>
               {link.label}
             </BreadcrumbLink>
           </BreadcrumbItem>
