@@ -33,7 +33,7 @@ const WithBreadcrumbs: FC<WithBreadcrumbsProps> = ({ navKeys = [] }) => {
     let currentNode = navigationTree;
 
     // Reduce the pathList to a breadcrumbs array by finding each path in the current navigation layer,
-    // updating the currentNode to the found node's items(next layer) for the next iteration.
+    // updating the currentNode to the found node's items (next layer) for the next iteration.
     return pathList.reduce((breadcrumbs, path, index) => {
       const nodeWithCurrentPath = currentNode.find(
         ([nodePath, entry]) =>
