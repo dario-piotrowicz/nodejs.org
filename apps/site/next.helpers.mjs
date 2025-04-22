@@ -34,6 +34,9 @@ export const getRelativePath = path => fileURLToPath(new URL('.', path));
  * @returns {Promise<Array<string>>} a promise containing an array of paths
  */
 export const getMarkdownFiles = async (root, cwd, ignore = []) => {
+  throw new Error(
+    'ERROR: the test is hitting the real getMarkdownFiles utility'
+  );
   const cacheKey = `${root}${cwd}${ignore.join('')}`;
 
   if (!globCacheByPath.has(cacheKey)) {
