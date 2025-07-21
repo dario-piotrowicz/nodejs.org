@@ -4,26 +4,24 @@ import { ArrowRightIcon } from '@heroicons/react/24/solid';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import type { FC } from 'react';
+import { useActionState } from 'react';
 
 import Button from '#site/components/Common/Button';
 import GlowingBackdropLayout from '#site/layouts/GlowingBackdrop';
 
+import { testAction } from '../action';
+
 const NotFoundPage: FC = () => {
   const t = useTranslations();
+  const [state, formAction] = useActionState(testAction, 'initial');
 
   return (
     <GlowingBackdropLayout kind="default">
       <span>404</span>
-      <Button
-        className="left-0 top-0 text-sm"
-        onClick={() => {
-          fetch('/api/test')
-            .then(res => res.text())
-            .then(data => alert(data));
-        }}
-      >
-        TEST
-      </Button>
+      <span>{state}</span>
+      <form action={formAction}>
+        <Button type="submit">TEST</Button>
+      </form>
       <h1 className="special -mt-4 text-center">
         {t('layouts.error.notFound.title')}
       </h1>
