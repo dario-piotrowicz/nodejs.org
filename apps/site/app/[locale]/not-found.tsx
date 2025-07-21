@@ -14,7 +14,16 @@ const NotFoundPage: FC = () => {
   return (
     <GlowingBackdropLayout kind="default">
       <span>404</span>
-
+      <Button
+        className="left-0 top-0 text-sm"
+        onClick={() => {
+          fetch('/api/test')
+            .then(res => res.text())
+            .then(data => alert(data));
+        }}
+      >
+        TEST
+      </Button>
       <h1 className="special -mt-4 text-center">
         {t('layouts.error.notFound.title')}
       </h1>
